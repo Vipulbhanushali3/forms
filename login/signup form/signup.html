@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+</head>
+<body>
+    <div class="signup-form-wrap">
+        <form id="signup-form">
+            <label>Enter name: </label>
+            <input type="text" name="name" placeholder="Enter Name"><br><br>
+            <label>Enter Email: </label>
+            <input type="email" name="email" placeholder="Enter Email"><br><br>
+            <label>Enter Password: </label>
+            <input type="text" name="password" placeholder="Enter Password"><br><br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <div class="login-btn-wrap">
+        <p>If You Already Have Account<a href="../login form/login.html">Login</a>Click Here</p>
+    </div>
+    <script>
+        console.log("Hi");
+        
+        document.querySelector("#signup-form").addEventListener("submit", async(e)=>{
+            e.preventDefault();
+            console.log("Bye");
+            const responseData = new FormData(document.querySelector("#signup-form"));
+            const data = Object.fromEntries(responseData.entries());
+            console.log(data);
+            
+            const response  = await fetch("http://localhost:3000/api/signup", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            })
+            const message = await response.json();
+            const tokenValue = await message.token;
+            if (tokenValue) {
+                localStorage.setItem("token", tokenValue);
+            }
+            
+            if (response.ok) {
+                console.log(message.message);
+                document.querySelectorAll("#signup-form input").forEach((inputValue) => {
+                    inputValue.value = "";
+                })
+            } else {
+                console.log(message.message);
+                if (confirm(`${message.message}\nOpen profile page?`)) {
+                    window.location.href = "../profile page/profile.html";
+                }
+                document.querySelectorAll("#signup-form input").forEach((inputValue) => {
+                    inputValue.value = "";
+                })
+            }
+        })
+    </script>
+</body>
+</html>
+
+
+

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Page</title>
+    <script>
+        function decodeToken(token) {
+            const payload = token.split('.')[1];  
+            return JSON.parse(atob(payload));
+        }
+    </script>
+</head>
+<body>
+    <h1>Welcome to  your profile</h1>
+</body>
+</html>
+http://localhost:3000/api/profile

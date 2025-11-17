@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <div class="login-form-wrap">
+        <form id="login-form">
+            <label>Enter Email: </label> 
+            <input type="email" name="email" placeholder="Enter Email"><br><br>
+            <label>Enter Password: </label>
+            <input type="text" name="password" placeholder="Enter Password"><br><br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <script>
+         document.querySelector("#login-form").addEventListener("submit", async(e)=>{
+            e.preventDefault();
+            const formValue = new FormData(document.querySelector("#login-form"));
+            const objectValues = Object.fromEntries(formValue.entries());
+
+            const result = await fetch("http://localhost:3000/api/login", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(objectValues),
+            })
+            const data = await result.json();
+            const tokenValue = await data.token;
+            if (tokenValue) {
+                localStorage.setItem("token", tokenValue);
+            }
+            console.log(data);
+            
+            if (result.ok) {
+                if (confirm(`${data.message}/n Click ok for redirecting to profile page`)) {
+                    window.location.href = "../profile page/profile.html";
+                }
+            } else {
+                if (confirm(`${data.message}/n Please go and Sign up first`)) {
+                    window.location.href = "../signup form/signup.html";
+                }
+            }
+            console.log(data);
+            document.querySelectorAll("#login-form input").forEach((inputValue) => {
+                inputValue.value = "";
+            })
+         })
+    </script>
+</body>
+</html>
