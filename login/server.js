@@ -48,9 +48,9 @@ app.post("/api/signup", async (req, res) => {
 
   // ⭐ GENERATE TOKEN HERE
   const token = jwt.sign(
-    { id: newUser.id, email: newUser.email },
-    JWT_SECRET,
-    { expiresIn: "1h" }
+      { id: newUser.id, name: newUser.name, email: newUser.email },
+      JWT_SECRET,
+      { expiresIn: "1h" }
   );
 
   res.json({
@@ -76,9 +76,11 @@ app.post("/api/login", async (req, res) => {
   if (!valid) return res.status(401).json({ message: "Invalid credentials" });
 
   // Create JWT token
-  const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
-    expiresIn: "1h",
-  });
+  const token = jwt.sign(
+      { id: user.id, name: user.name, email: user.email },
+      JWT_SECRET,
+      { expiresIn: "1h" }
+  );
 
   res.json({ message: "Login successful", token });
 });

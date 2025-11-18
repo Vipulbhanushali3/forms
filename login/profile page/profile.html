@@ -4,15 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile Page</title>
-    <script>
-        function decodeToken(token) {
-            const payload = token.split('.')[1];  
-            return JSON.parse(atob(payload));
-        }
-    </script>
 </head>
 <body>
     <h1>Welcome to  your profile</h1>
+    <span id="username"></span><br>
+    <span id="email"></span>
+    <script>
+        function decodeToken(token) {
+            const payload = token.split('.')[1];  
+            const base64 = payload.replace(/-/g, '+').replace(/_/g, '/'); 
+            return JSON.parse(atob(base64));
+        }
+        let tokenValue = localStorage.getItem("token");
+        let decodeValue = decodeToken(tokenValue);
+        document.querySelector("#username").innerText = `Name : ${decodeValue.name}`;
+        document.querySelector("#email").innerText = `Email : ${decodeValue.email}`;
+    </script>
 </body>
 </html>
-http://localhost:3000/api/profile
